@@ -1,17 +1,36 @@
+import sys
+from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+class picture(QWidget):
+    def __init__(self):
+        super(picture, self).__init__()
 
-from tkinter import *
-root = Tk()  # 创建窗口对象的背景色
-# 创建两个列表
-li = ['C', 'python', 'php', 'html', 'SQL', 'java']
-movie = ['CSS', 'jQuery', 'Bootstrap']
-listb = Listbox(root)  # 创建两个列表组件
-listb2 = Listbox(root)
-for item in li:  # 第一个小部件插入数据
-    listb.insert(0, item)
+        self.resize(600, 400)
+        self.setWindowTitle("label显示图片")
 
-for item in movie:  # 第二个小部件插入数据
-    listb2.insert(0, item)
+        self.label = QLabel(self)
+        self.label.setText("显示图片")
+        self.label.setFixedSize(300, 200)
+        self.label.move(160, 160)
 
-listb.pack()  # 将小部件放置到主窗口中
-listb2.pack()
-root.mainloop()
+        self.label.setStyleSheet("QLabel{background:white;}"
+                                 "QLabel{color:rgb(300,300,300,120);font-size:10px;font-weight:bold;font-family:宋体;}"
+                                 )
+
+        btn = QPushButton(self)
+        btn.setText("打开图片")
+        btn.move(10, 30)
+        btn.clicked.connect(self.openimage)
+    def openimage(self):
+        imgName, imgType = QFileDialog.getOpenFileName(self, "打开图片", "", "*.jpg;;*.png;;All Files(*)")
+        jpg = QtGui.QPixmap(imgName).scaled(self.label.width(), self.label.height())
+        self.label.setPixmap(jpg)
+
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    my = picture()
+    my.show()
+    sys.exit(app.exec_())
