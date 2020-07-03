@@ -137,7 +137,7 @@ def get_carLicense_img_blue(image):
             return image
     return False
 # 读取待检测图片
-origin_image = cv2.imread('../img/10.png')
+origin_image = cv2.imread('../img/6.jpg')
 b, g, r = cv2.split(origin_image)
 img = cv2.merge([r, g, b])
 plt.subplot(2,1,1)
@@ -150,4 +150,31 @@ if type(carLicense_image) != np.ndarray:
 plt.subplot(2,1,2)
 plt.title('chepai')
 plt.imshow(carLicense_image[...,::-1])
+cv2.imwrite('../img/chepairesult.jpg',carLicense_image)
 plt.show()
+
+
+from aip import AipOcr
+APP_ID = '20742056'
+API_KEY = 'EnlGTLZvivZAl9qNoeKbf7sU'
+SECRET_KEY = 'PkNL8zfb6WqdIlNIm3A5HZaGpShhWuzC'
+client = AipOcr(APP_ID, API_KEY, SECRET_KEY)
+
+
+def get_file_content(filePath):
+    with open(filePath, 'rb') as fp:
+        return fp.read()
+
+
+def image2text(fileName):
+    image = get_file_content(fileName)
+    dic_result = client.basicGeneral(image)
+    res = dic_result['words_result']
+    result = ''
+    for m in res:
+        result = result + str(m['words'])
+    return result
+
+
+getresult = image2text('../img/chepairesult.jpg')
+print(getresult)
